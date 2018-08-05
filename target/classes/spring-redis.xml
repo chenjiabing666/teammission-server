@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+
+	<!-- 加载redis.properties,其中定义了数据库的配置信息 -->
+	<util:properties id="redisConfig" location="classpath:redis.properties" />
+	
+	<!-- 添加redis参数配置文件 -->
+	<util:properties id="redisParameter" location="classpath:redisConfig.properties" />
+
+	<!-- 配置Redis的连接池 -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<!-- 配置最大空闲连接数，当空闲连接超过该值时就挨个关闭多余的连接，但不能小于minldle -->
+		<property name="maxIdle" value="#{redisConfig.maxIdle}"></property>
+
+		<!-- 配置最小空闲连接数 -->
+		<property name="minIdle" value="#{redisConfig.minIdle}"></property>
+
+		<!-- 验证连接是否有效 -->
+
+		<!-- 设置获取连接的时候测试连接是否可用，默认为false -->
+		<property name="testOnBorrow" value="#{redisConfig.testOnBorrow}"></property>
+		<!-- 新建连接的时候测试连接是否可用，默认为false -->
+		<property name="testOnCreate" value="#{redisConfig.testOnCreate}"></property>
+		<!-- 将连接释放回连接池的时候测试连接 默认为false -->
+		<property name="testOnReturn" value="#{redisConfig.testOnReturn}"></property>
+		<!-- 设置等待获取连接池连接的时间，一旦超过这个时间，抛出异常 单位毫秒 -->
+		<property name="maxWaitMillis" value="#{redisConfig.maxWaitMillis}"></property>
+
+
+		<!-- 连接空闲多久从池中去除，单位为毫秒 <=0表示禁用 -->
+		<property name="minEvictableIdleTimeMillis" value="#{redisConfig.minEvictableIdleTimeMillis}"></property>
+
+		<!-- 设置每次测试多少空闲连接 <=0表示禁用 -->
+		<property name="numTestsPerEvictionRun" value="#{redisConfig.numTestsPerEvictionRun}"></property>
+
+		<!-- 设置定时测试时间，单位毫秒 <=0表示禁用 -->
+		<property name="timeBetweenEvictionRunsMillis" value="#{redisConfig.timeBetweenEvictionRunsMillis}"></property>
+
+	</bean>
+
+	<bean id="jedisConnFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<!-- 设置是否使用连接池，默认为true -->
+		<property name="usePool" value="#{redisConfig.usePool}" />
+
+		<!-- 设置连接池，使用上面配置好的连接池jedisPoolConfig -->
+		<property name="poolConfig" ref="jedisPoolConfig"></property>
+
+		<!-- 设置远程的IP地址 -->
+		<property name="hostName" value="#{redisConfig.hostName}" />
+
+		<!-- 设置端口号，默认为6379 -->
+		<property name="port" value="#{redisConfig.port}"></property>
+
+		<!-- 设置获取连接的超时时间 -->
+		<property name="timeout" value="#{redisConfig.timeout}"></property>
+	</bean>
+
+	<!-- 配置 StringRedisSerializer序列化 -->
+	<bean id="stringRedisSerializer"
+		class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+
+	<bean id="jdkSerializationRedisSerializer"
+		class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+
+	<!-- 配置RedisTemplate，其中封装了操作Redis的各种方法 -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+
+		<!-- 配置Jedis的连接工厂，引用上面 -->
+		<property name="connectionFactory" ref="jedisConnFactory" />
+
+		<!-- 配置key的序列化 一般都会使用stringRedisSerializer，默认使用的是JdkSerializationRedisSerializer -->
+		<property name="keySerializer" ref="stringRedisSerializer"></property>
+		
+		<!-- 配置JdkSerializationRedisSerializer序列化 -->
+		<property name="valueSerializer" ref="jdkSerializationRedisSerializer"></property>
+		
+		<!-- 配置hashkey的序列化，就是field -->
+		<property name="hashKeySerializer" ref="stringRedisSerializer"></property>
+		
+		<!-- 配置hashvalue的值的序列化 -->		
+		<property name="hashValueSerializer" ref="jdkSerializationRedisSerializer"></property>
+		
+		<!-- 开始redis事务，使用mulit和exec即可实现事务的操作和回滚 -->
+		<property name="enableTransactionSupport" value="true"></property>
+	</bean>
+	
+	
+	<!-- 配置Redis的工具类 -->
+	<bean id="redisUtils" class="com.techwells.teammission.util.RedisUtils">
+		<property name="template" ref="redisTemplate"></property>
+	</bean>
+	
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+

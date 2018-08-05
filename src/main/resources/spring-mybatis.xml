@@ -15,7 +15,10 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.1.xsd">
 
-
+	<import resource="classpath:spring-redis.xml"/>
+	
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	
 	<!-- 调度工厂 
 	<bean id="scheduler"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />-->
@@ -23,32 +26,31 @@
 	
 	<!-- 自动扫描 -->
 	<context:component-scan base-package="com.techwells.teammission.service" />
-	<context:component-scan base-package="com.techwells.teammission.dao*" />
 
 	<!-- 引入配置文件 -->
-	<bean id="propertyConfigurer"
+	<!-- <bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:jdbc.properties" />
-	</bean>
+	</bean> -->
 
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">
-		<property name="driverClassName" value="${driver}" />
-		<property name="url" value="${url}" />
-		<property name="username" value="${username}" />
-		<property name="password" value="${password}" />
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
 		<!-- 初始化连接大小 -->
-		<property name="initialSize" value="${initialSize}"></property>
+		<property name="initialSize" value="${jdbc.initialSize}"></property>
 		<!-- 连接池最大数量 -->
-		<property name="maxActive" value="${maxActive}"></property>
+		<property name="maxActive" value="${jdbc.maxActive}"></property>
 		<!-- 连接池最大空闲 -->
-		<property name="maxIdle" value="${maxIdle}"></property>
+		<property name="maxIdle" value="${jdbc.maxIdle}"></property>
 		<!-- 连接池最小空闲 -->
-		<property name="minIdle" value="${minIdle}"></property>
+		<property name="minIdle" value="${jdbc.minIdle}"></property>
 		<!-- 获取连接最大等待时间 -->
-		<property name="maxWait" value="${maxWait}"></property>
+		<property name="maxWait" value="${jdbc.maxWait}"></property>
 
-		<property name="validationQuery" value="${validationQuery}" />
+		<property name="validationQuery" value="${jdbc.validationQuery}" />
 		<property name="testOnBorrow" value="false" />
 		<property name="testOnReturn" value="false" />
 		<property name="testWhileIdle" value="true" />
@@ -91,8 +93,12 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
+	<!-- 声明式事务注解，默认当发生运行时异常的时候事务回滚,但是可以使用rollbackFor显式的设置事务回滚条件-->
+	<!-- 开启事务注解 ,transaction-manager指定的是上面配置的事务管理器的id-->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
 
-	<!-- 拦截器方式配置事物 -->
+	<!-- 拦截器方式配置事物 
 	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="add*" propagation="REQUIRED" />
@@ -119,7 +125,7 @@
 			expression="execution(* com.techwells.teammission.service..*Impl.*(..))" />
 		<aop:advisor pointcut-ref="transactionPointcut"
 			advice-ref="transactionAdvice" />
-	</aop:config>
+	</aop:config>-->
 
 
 	<!-- 配置druid监控spring jdbc -->

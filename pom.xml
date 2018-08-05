@@ -5,20 +5,44 @@
 	<artifactId>teammission</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-
+	<!-- 版本管理 -->
+	<properties>
+		<spring-version>4.3.13.RELEASE</spring-version>
+	</properties>
+	
 	<dependencies>
 		<!-- SpringMVC -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>${spring-version}</version>
 		</dependency>
 
 		<!-- Spring-JDBC,要和spring-webmvc的版本一致 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>4.1.7.RELEASE</version>
+			<version>${spring-version}</version>
+		</dependency>
+		
+		<!-- 导入aspectj依赖 -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.13</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.8.13</version>
+		</dependency>
+		
+		<!-- 导入spring的aop -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring-version}</version>
 		</dependency>
 
 		<!-- MyBatis -->
@@ -35,6 +59,21 @@
 			<version>1.3.2</version>
 		</dependency>
 
+
+		<!-- 添加文件上传的依赖 -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+		
+		
 		<!-- MySQL驱动jar包 -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -64,51 +103,16 @@
 			<version>1.2</version>
 		</dependency>
 
-		<!-- Junit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-		</dependency>
 
-		<!-- 导入aspectj依赖 -->
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>1.8.13</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>1.8.13</version>
-		</dependency>
-
-		<!-- 导入spring的aop -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<version>3.2.8.RELEASE</version>
-		</dependency>
-
+		
+		<!-- 编码jar -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.10</version>
 		</dependency>
 
-		<!-- 添加文件上传的依赖 -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.3.1</version>
-		</dependency>
+		
 
 		<!-- 添加POI的依赖,生成Excel -->
 		<dependency>
@@ -213,7 +217,21 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/jave-1.0.2.jar</systemPath>
 		</dependency>
+		
+		
+		<!-- 添加redis缓存 -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.8.9.RELEASE</version>
+		</dependency>
+		
 	</dependencies>
 
 

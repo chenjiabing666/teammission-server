@@ -18,7 +18,7 @@ import java.util.HashMap;
  * @version 1.0
  */
 public class ResultSuccessInfo {
-	private String successCode = "0";   //状态码
+	private String successCode = "100200";   //状态码
 	private String successMessage = "";    //提示信息
 	private int total = 0;   //查询到的总数
 	private double totalIncome;   
