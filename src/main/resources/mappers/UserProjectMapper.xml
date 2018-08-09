@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.techwells.teammission.dao.UserProjectMapper" >
+  <resultMap id="BaseResultMap" type="com.techwells.teammission.domain.UserProject" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <id column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="power" property="power" jdbcType="INTEGER" />
+    <result column="activated" property="activated" jdbcType="INTEGER" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    <result column="updated_date" property="updatedDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, project_id, created_date, power, activated, deleted, updated_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.techwells.teammission.domain.UserProjectKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user_project
+    where user_id = #{userId,jdbcType=INTEGER}
+      and project_id = #{projectId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.techwells.teammission.domain.UserProjectKey" >
+    delete from t_user_project
+    where user_id = #{userId,jdbcType=INTEGER}
+      and project_id = #{projectId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.techwells.teammission.domain.UserProject" >
+    insert into t_user_project (user_id, project_id, created_date, 
+      power, activated, deleted, 
+      updated_date)
+    values (#{userId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{power,jdbcType=INTEGER}, #{activated,jdbcType=INTEGER}, #{deleted,jdbcType=INTEGER}, 
+      #{updatedDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.techwells.teammission.domain.UserProject" >
+    insert into t_user_project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="power != null" >
+        power,
+      </if>
+      <if test="activated != null" >
+        activated,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+      <if test="updatedDate != null" >
+        updated_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="power != null" >
+        #{power,jdbcType=INTEGER},
+      </if>
+      <if test="activated != null" >
+        #{activated,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.techwells.teammission.domain.UserProject" >
+    update t_user_project
+    <set >
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="power != null" >
+        power = #{power,jdbcType=INTEGER},
+      </if>
+      <if test="activated != null" >
+        activated = #{activated,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null" >
+        deleted = #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="updatedDate != null" >
+        updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+      and project_id = #{projectId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.techwells.teammission.domain.UserProject" >
+    update t_user_project
+    set created_date = #{createdDate,jdbcType=TIMESTAMP},
+      power = #{power,jdbcType=INTEGER},
+      activated = #{activated,jdbcType=INTEGER},
+      deleted = #{deleted,jdbcType=INTEGER},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=INTEGER}
+      and project_id = #{projectId,jdbcType=INTEGER}
+  </update>
+  
+  
+ <!-- 
+ 	ProjectUserVos selectProjectUserVosByProjectId(Integer projectId);
+  -->
+<select id="selectProjectUserVosByProjectId" resultType="com.techwells.teammission.domain.rs.ProjectUserVos">
+	SELECT
+	p.project_id as projectId,
+	p.project_name as projectName,
+	p.introduction,
+	p.publicity as publicty,
+	u.user_id as userId,
+	u.real_name as realName
+FROM
+	t_user u,
+	t_user_project up,
+	t_project p
+WHERE
+	p.project_id = up.project_id
+AND u.user_id = up.user_id
+AND p.project_id = #{projectId}
+AND up.power = 1
+</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+</mapper>

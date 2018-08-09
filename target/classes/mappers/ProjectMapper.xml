@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.techwells.teammission.dao.ProjectMapper" >
+  <resultMap id="BaseResultMap" type="com.techwells.teammission.domain.Project" >
+    <id column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="publicity" property="publicity" jdbcType="INTEGER" />
+    <result column="project_url" property="projectUrl" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.techwells.teammission.domain.ProjectWithBLOBs" extends="BaseResultMap" >
+    <result column="introduction" property="introduction" jdbcType="LONGVARCHAR" />
+    <result column="detail" property="detail" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    project_id, project_name, publicity, project_url, status, start_time, end_time, deleted, 
+    created_date, update_date
+  </sql>
+  <sql id="Blob_Column_List" >
+    introduction, detail
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_project
+    where project_id = #{projectId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_project
+    where project_id = #{projectId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.techwells.teammission.domain.ProjectWithBLOBs" >
+    <selectKey resultType="java.lang.Integer" keyProperty="projectId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_project (project_name, publicity, project_url, 
+      status, start_time, end_time, 
+      deleted, created_date, update_date, 
+      introduction, detail)
+    values (#{projectName,jdbcType=VARCHAR}, #{publicity,jdbcType=INTEGER}, #{projectUrl,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{deleted,jdbcType=INTEGER}, #{createdDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{introduction,jdbcType=LONGVARCHAR}, #{detail,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.techwells.teammission.domain.ProjectWithBLOBs" >
+    <selectKey resultType="java.lang.Integer" keyProperty="projectId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="projectName != null" >
+        project_name,
+      </if>
+      <if test="publicity != null" >
+        publicity,
+      </if>
+      <if test="projectUrl != null" >
+        project_url,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="introduction != null" >
+        introduction,
+      </if>
+      <if test="detail != null" >
+        detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="publicity != null" >
+        #{publicity,jdbcType=INTEGER},
+      </if>
+      <if test="projectUrl != null" >
+        #{projectUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="detail != null" >
+        #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.techwells.teammission.domain.ProjectWithBLOBs" >
+    update t_project
+    <set >
+      <if test="projectName != null" >
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="publicity != null" >
+        publicity = #{publicity,jdbcType=INTEGER},
+      </if>
+      <if test="projectUrl != null" >
+        project_url = #{projectUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null" >
+        deleted = #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="introduction != null" >
+        introduction = #{introduction,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="detail != null" >
+        detail = #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where project_id = #{projectId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.techwells.teammission.domain.ProjectWithBLOBs" >
+    update t_project
+    set project_name = #{projectName,jdbcType=VARCHAR},
+      publicity = #{publicity,jdbcType=INTEGER},
+      project_url = #{projectUrl,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=INTEGER},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      introduction = #{introduction,jdbcType=LONGVARCHAR},
+      detail = #{detail,jdbcType=LONGVARCHAR}
+    where project_id = #{projectId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.techwells.teammission.domain.Project" >
+    update t_project
+    set project_name = #{projectName,jdbcType=VARCHAR},
+      publicity = #{publicity,jdbcType=INTEGER},
+      project_url = #{projectUrl,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=INTEGER},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where project_id = #{projectId,jdbcType=INTEGER}
+  </update>
+  
+  
+  <!-- 
+  	List<User> selectUserByProjectId(Integer projectId);
+   -->
+  <select id="selectUserByProjectId" resultType="com.techwells.teammission.domain.User">
+  		SELECT
+	u.email AS email,
+	u.user_icon AS userIcon,
+	u.user_name AS userName,
+	real_name AS realName,
+	u.user_id AS userId
+FROM
+	t_user u,
+	t_user_project up
+WHERE
+	u.user_id = up.user_id
+AND up.project_id = #{projectId}
+  </select>
+   
+  
+  
+</mapper>

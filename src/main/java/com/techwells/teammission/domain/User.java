@@ -3,46 +3,91 @@ package com.techwells.teammission.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable {
-	
-	private static final long serialVersionUID = -4046118232613426547L;
+public class User implements Serializable{
+	private static final long serialVersionUID = -6833816823369136064L;
 
-	private Integer id;
+	private Integer userId;
 
-    private String name;
+    private String userName;
 
-    private Integer age;
+    private String password;
+
+    private String nickName;
+
+    private String realName;
+
+    private String job;
 
     private Integer gender;
 
-    private Date birthday;
+    private Integer age;
 
-    private Date createddate;
+    private String email;
 
-    private Date updatedate;
+    private String userIcon;
 
-    public Integer getId() {
-        return id;
+    private String mobile;
+
+    private String address;
+
+    private Integer activated;
+
+    private Integer deleted;
+
+    private Date createdDate;
+
+    private Date updatedDate;
+
+    private Date lastLoginTime;
+
+    private Integer loginStatus;
+
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
     }
 
-    public Integer getAge() {
-        return age;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName == null ? null : nickName.trim();
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName == null ? null : realName.trim();
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job == null ? null : job.trim();
     }
 
     public Integer getGender() {
@@ -53,36 +98,105 @@ public class User implements Serializable {
         this.gender = gender;
     }
 
-    public Date getBirthday() {
-        return birthday;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
-    public Date getCreateddate() {
-        return createddate;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCreateddate(Date createddate) {
-        this.createddate = createddate;
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
     }
 
-    public Date getUpdatedate() {
-        return updatedate;
+    public String getUserIcon() {
+        return userIcon;
     }
 
-    public void setUpdatedate(Date updatedate) {
-        this.updatedate = updatedate;
+    public void setUserIcon(String userIcon) {
+        this.userIcon = userIcon == null ? null : userIcon.trim();
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile == null ? null : mobile.trim();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
+    }
+
+    public Integer getActivated() {
+        return activated;
+    }
+
+    public void setActivated(Integer activated) {
+        this.activated = activated;
+    }
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public Integer getLoginStatus() {
+        return loginStatus;
+    }
+
+    public void setLoginStatus(Integer loginStatus) {
+        this.loginStatus = loginStatus;
     }
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", age=" + age
-				+ ", gender=" + gender + ", birthday=" + birthday
-				+ ", createddate=" + createddate + ", updatedate=" + updatedate
-				+ "]";
+		return "User [userId=" + userId + ", userName=" + userName
+				+ ", password=" + password + ", nickName=" + nickName
+				+ ", realName=" + realName + ", job=" + job + ", gender="
+				+ gender + ", age=" + age + ", email=" + email + ", userIcon="
+				+ userIcon + ", mobile=" + mobile + ", address=" + address
+				+ ", activated=" + activated + ", deleted=" + deleted
+				+ ", createdDate=" + createdDate + ", updatedDate="
+				+ updatedDate + ", lastLoginTime=" + lastLoginTime
+				+ ", loginStatus=" + loginStatus + "]";
 	}
     
 }

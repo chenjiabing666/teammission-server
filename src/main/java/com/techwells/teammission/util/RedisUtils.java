@@ -43,6 +43,19 @@ public class RedisUtils {
 	}
 	
 	/**
+	 * 添加指定的key到Redis中
+	 * @param key 指定的Ke
+	 * @param object  数据
+	 * @param timeout  过期时间
+	 * @param unit    时间单位
+	 * @throws Exception
+	 */
+	public void addStringObject(String key,Object object,Long timeout,TimeUnit unit) throws Exception{
+		this.addStringObject(key, object);
+		template.expire(key, timeout, unit);
+	}
+	
+	/**
 	 * 根据键值从redis中获取对象 string类型的对象
 	 * @param key  key
 	 * @return   返回对象
@@ -93,17 +106,35 @@ public class RedisUtils {
 	
 	
 	/**
+	 * 向hash中添加数据，并且设置过期的时间
+	 * @param key  key
+	 * @param field  域
+	 * @param object  数据
+	 * @param timeout  过期时间
+	 * @param unit    单位
+	 * @throws Exception
+	 */
+	public void addHashObject(String key,String field,Object object,Long timeout,TimeUnit unit)throws Exception{
+		this.addHashObject(key, field, object);
+		this.setExpireTimeForKey(key, timeout, unit);
+	}
+	
+	
+	/**
 	 * 批量添加数据到指定的hash中
 	 * @param key  key
 	 * @param map  需要添加的数据  Map<field,value>
 	 * @param expireTime  过期时间，单位秒,如果为null，默认永远不过期
 	 */
-	public void addHashObjectBatch(String key,Map<Object, Object> map,Long expireTime)throws Exception{
+	public void addHashObjectBatch(String key,Map<Object, Object> map,Long expireTime,TimeUnit unit)throws Exception{
 		template.opsForHash().putAll(key,map);
 		if (expireTime!=null) {
-			this.setExpireTimeForKey(key, expireTime, TimeUnit.SECONDS);  //设置过期时间
+			this.setExpireTimeForKey(key, expireTime,unit);  //设置过期时间
 		}
 	}
+	
+	
+	
 	
 	
 	/**
@@ -316,6 +347,15 @@ public class RedisUtils {
 	 */
 	public static void reverse(List<? extends Object> objects){
 		Collections.reverse(objects);
+	}
+	
+	
+	/**
+	 * 删除所有的键值
+	 */
+	public void delteAllKeys(){
+		Set<String> keys=template.keys("*");  //获取所有的key
+		template.delete(keys);   //删除所有的键值
 	}
 	
 }

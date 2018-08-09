@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.techwells.teammission.dao.ProjectImageMapper" >
+  <resultMap id="BaseResultMap" type="com.techwells.teammission.domain.ProjectImage" >
+    <id column="image_id" property="imageId" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="image_name" property="imageName" jdbcType="VARCHAR" />
+    <result column="show_image" property="showImage" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="activated" property="activated" jdbcType="INTEGER" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    image_id, project_id, image_url, image_name, show_image, introduction, activated, 
+    deleted, update_date, created_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_project_image
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_project_image
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.techwells.teammission.domain.ProjectImage" >
+    insert into t_project_image (image_id, project_id, image_url, 
+      image_name, show_image, introduction, 
+      activated, deleted, update_date, 
+      created_date)
+    values (#{imageId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{imageUrl,jdbcType=VARCHAR}, 
+      #{imageName,jdbcType=VARCHAR}, #{showImage,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, 
+      #{activated,jdbcType=INTEGER}, #{deleted,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{createdDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.techwells.teammission.domain.ProjectImage" >
+    insert into t_project_image
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="imageId != null" >
+        image_id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="imageUrl != null" >
+        image_url,
+      </if>
+      <if test="imageName != null" >
+        image_name,
+      </if>
+      <if test="showImage != null" >
+        show_image,
+      </if>
+      <if test="introduction != null" >
+        introduction,
+      </if>
+      <if test="activated != null" >
+        activated,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="imageId != null" >
+        #{imageId,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="imageUrl != null" >
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageName != null" >
+        #{imageName,jdbcType=VARCHAR},
+      </if>
+      <if test="showImage != null" >
+        #{showImage,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="activated != null" >
+        #{activated,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.techwells.teammission.domain.ProjectImage" >
+    update t_project_image
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="imageUrl != null" >
+        image_url = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageName != null" >
+        image_name = #{imageName,jdbcType=VARCHAR},
+      </if>
+      <if test="showImage != null" >
+        show_image = #{showImage,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null" >
+        introduction = #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="activated != null" >
+        activated = #{activated,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null" >
+        deleted = #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.techwells.teammission.domain.ProjectImage" >
+    update t_project_image
+    set project_id = #{projectId,jdbcType=INTEGER},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+      image_name = #{imageName,jdbcType=VARCHAR},
+      show_image = #{showImage,jdbcType=VARCHAR},
+      introduction = #{introduction,jdbcType=VARCHAR},
+      activated = #{activated,jdbcType=INTEGER},
+      deleted = #{deleted,jdbcType=INTEGER},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      created_date = #{createdDate,jdbcType=TIMESTAMP}
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </update>
+  
+
+<!-- 
+	int insertImageBatch(@Param("projectImages")List<ProjectImage> projectImages);
+ -->
+ 
+ <insert id="insertImageBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="imageId">
+	 	insert into t_project_image (image_id, project_id, image_url, 
+      image_name, show_image, introduction,
+      activated, deleted, update_date, 
+      created_date)
+      values
+     <foreach collection="list" item="image" separator=",">
+     (#{image.imageId,jdbcType=INTEGER}, #{image.projectId,jdbcType=INTEGER}, #{image.imageUrl,jdbcType=VARCHAR}, 
+      #{image.imageName,jdbcType=VARCHAR}, #{image.showImage,jdbcType=VARCHAR}, #{image.introduction,jdbcType=VARCHAR}, 
+      #{image.activated,jdbcType=INTEGER}, #{image.deleted,jdbcType=INTEGER}, #{image.updateDate,jdbcType=TIMESTAMP}, 
+      #{image.createdDate,jdbcType=TIMESTAMP})
+      </foreach>
+ </insert>
+  
+  
+  
+</mapper>
