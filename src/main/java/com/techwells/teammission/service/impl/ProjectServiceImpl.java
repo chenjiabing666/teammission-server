@@ -20,11 +20,14 @@ import org.springframework.util.StringUtils;
 
 import sun.util.logging.resources.logging;
 
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Dynamic;
 import com.sun.crypto.provider.RSACipher;
+import com.techwells.teammission.dao.ProjectDynamicMapper;
 import com.techwells.teammission.dao.ProjectMapper;
 import com.techwells.teammission.dao.UserMapper;
 import com.techwells.teammission.dao.UserProjectMapper;
 import com.techwells.teammission.domain.Project;
+import com.techwells.teammission.domain.ProjectDynamic;
 import com.techwells.teammission.domain.ProjectWithBLOBs;
 import com.techwells.teammission.domain.User;
 import com.techwells.teammission.domain.UserProject;
@@ -50,8 +53,22 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectMapper projectMapper;
 	
 	@Resource
+	private ProjectDynamicMapper dynamicMapper;
+	
+	@Resource
 	private UserProjectMapper userProjectMapper;
 	
+	@Resource
+	private UserMapper userMapper;
+	
+	@Value("#{redisParameter.projectDynamicListKey}")
+	private String PROJECT_DYNAMIC;      //键值key
+	
+	@Value("#{redisParameter.projectDynamicExpireTime}")
+	private Long PROJECT_DYNAMIC_EXPIRE_TIME;   //过期时间
+	
+	@Value("#{redisParameter.userHashKey}")
+	private String USER_KEY; // User中hash的key
 	
 	@Value("#{redisParameter.projectHashKey}")
 	private String PROJECT_KEY;     //项目在缓存中对应的key
@@ -112,9 +129,43 @@ public class ProjectServiceImpl implements ProjectService {
 		int count1=userProjectMapper.insertSelective(userProject);  //绑定项目
 		
 		if (count1==0) {
-			resultInfo.setCode("100002");
-			resultInfo.setMessage("添加失败");
-			return resultInfo;
+			throw new RuntimeException();  //直接回滚
+		}
+		
+		//项目发布成功之后，发布项目的动态
+		
+		//根据userId获取用户信息 1. 从缓存中获取 2、从mysql中获取
+		
+		User user=null;
+		
+		try {
+			user=(User) redisUtils.getHashObject(USER_KEY, userId+"");
+		} catch (Exception e) {
+			throw new RuntimeException();
+		}
+		
+		//如果user==null，缓存中没有数据，那么从mysql中获取
+		if (user==null) {
+			user=userMapper.selectByPrimaryKey(userId);
+			//如果mysql中也不存在这个用户的信息，那么直接抛出异常回滚数据
+			if (user==null) {
+				throw new RuntimeException();
+			}
+		}
+		
+		//此时能够运行到这里，那么user肯定不为null
+		
+		ProjectDynamic dynamic=new ProjectDynamic();
+		dynamic.setCreatedDate(new Date());
+		dynamic.setProjectId(project.getProjectId());
+		dynamic.setUsericon(user.getUserIcon());  //获取头像
+		dynamic.setContent(user.getRealName()+" 创建了项目 "+" "+projectName) ;
+		
+		//发布项目动态
+		try {
+			BaseServiceUtils.addDynamic(dynamicMapper, redisUtils, PROJECT_DYNAMIC, dynamic,PROJECT_DYNAMIC_EXPIRE_TIME);
+		} catch (Exception e) {
+			throw new RuntimeException();
 		}
 		
 		resultInfo.setMessage("添加成功");

@@ -1,9 +1,12 @@
 package com.techwells.teammission.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ProjectImage {
-    private Integer imageId;
+public class ProjectImage implements Serializable {
+	private static final long serialVersionUID = -1375533603834127598L;
+
+	private Integer imageId;
 
     private Integer projectId;
 

@@ -147,6 +147,16 @@ public class RedisUtils {
 		template.expire(key, timeout, unit);
 	}
 	
+	
+	/**
+	 * 删除指定的key
+	 * @param key
+	 */
+	public void deleteKey(String key){
+		template.delete(key);
+	}
+	
+	
 	/**
 	 * 根据key，field从hash中获取数据
 	 * @param key
@@ -270,6 +280,18 @@ public class RedisUtils {
 	 */
 	public void addRightListObject(String key,Object value){
 		template.opsForList().rightPush(key, value);
+	}
+	
+	/**
+	 * 向List中添加元素，从表头添加
+	 * @param key
+	 * @param value
+	 * @param timeOut  过期时间
+	 * @param unit  单位
+	 */
+	public void addLeftListObject(String key,Object value,Long timeOut,TimeUnit unit){
+		template.opsForList().leftPush(key, value);
+		this.setExpireTimeForKey(key, timeOut, unit);   //设置过期时间
 	}
 	
 	/**

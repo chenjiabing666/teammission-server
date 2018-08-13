@@ -1,9 +1,12 @@
 package com.techwells.teammission.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserProject extends UserProjectKey {
-    private Date createdDate;
+public class UserProject extends UserProjectKey implements Serializable {
+	private static final long serialVersionUID = 6918551377276150368L;
+
+	private Date createdDate;
 
     private Integer power;
 

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.techwells.teammission.dao.InterfaceMapper" >
+  <resultMap id="BaseResultMap" type="com.techwells.teammission.domain.Interface" >
+    <id column="interface_id" property="interfaceId" jdbcType="INTEGER" />
+    <result column="project_image_id" property="projectImageId" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="interface_name" property="interfaceName" jdbcType="VARCHAR" />
+    <result column="parameter" property="parameter" jdbcType="VARCHAR" />
+    <result column="entity_name" property="entityName" jdbcType="VARCHAR" />
+    <result column="interface_url" property="interfaceUrl" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.techwells.teammission.domain.Interface" extends="BaseResultMap" >
+    <result column="introduction" property="introduction" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    interface_id, project_image_id, user_name, number, interface_name, parameter, entity_name, 
+    interface_url, deleted, created_date, update_date
+  </sql>
+  <sql id="Blob_Column_List" >
+    introduction
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_interface
+    where interface_id = #{interfaceId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_interface
+    where interface_id = #{interfaceId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.techwells.teammission.domain.Interface" >
+    <selectKey resultType="java.lang.Integer" keyProperty="interfaceId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_interface (project_image_id, user_name, number, 
+      interface_name, parameter, entity_name, 
+      interface_url, deleted, created_date, 
+      update_date, introduction)
+    values (#{projectImageId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, 
+      #{interfaceName,jdbcType=VARCHAR}, #{parameter,jdbcType=VARCHAR}, #{entityName,jdbcType=VARCHAR}, 
+      #{interfaceUrl,jdbcType=VARCHAR}, #{deleted,jdbcType=INTEGER}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{introduction,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.techwells.teammission.domain.Interface" >
+    <selectKey resultType="java.lang.Integer" keyProperty="interfaceId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_interface
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="projectImageId != null" >
+        project_image_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="interfaceName != null" >
+        interface_name,
+      </if>
+      <if test="parameter != null" >
+        parameter,
+      </if>
+      <if test="entityName != null" >
+        entity_name,
+      </if>
+      <if test="interfaceUrl != null" >
+        interface_url,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="introduction != null" >
+        introduction,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="projectImageId != null" >
+        #{projectImageId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaceName != null" >
+        #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="parameter != null" >
+        #{parameter,jdbcType=VARCHAR},
+      </if>
+      <if test="entityName != null" >
+        #{entityName,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaceUrl != null" >
+        #{interfaceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.techwells.teammission.domain.Interface" >
+    update t_interface
+    <set >
+      <if test="projectImageId != null" >
+        project_image_id = #{projectImageId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaceName != null" >
+        interface_name = #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="parameter != null" >
+        parameter = #{parameter,jdbcType=VARCHAR},
+      </if>
+      <if test="entityName != null" >
+        entity_name = #{entityName,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaceUrl != null" >
+        interface_url = #{interfaceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null" >
+        deleted = #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="introduction != null" >
+        introduction = #{introduction,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where interface_id = #{interfaceId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.techwells.teammission.domain.Interface" >
+    update t_interface
+    set project_image_id = #{projectImageId,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      interface_name = #{interfaceName,jdbcType=VARCHAR},
+      parameter = #{parameter,jdbcType=VARCHAR},
+      entity_name = #{entityName,jdbcType=VARCHAR},
+      interface_url = #{interfaceUrl,jdbcType=VARCHAR},
+      deleted = #{deleted,jdbcType=INTEGER},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      introduction = #{introduction,jdbcType=LONGVARCHAR}
+    where interface_id = #{interfaceId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.techwells.teammission.domain.Interface" >
+    update t_interface
+    set project_image_id = #{projectImageId,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      interface_name = #{interfaceName,jdbcType=VARCHAR},
+      parameter = #{parameter,jdbcType=VARCHAR},
+      entity_name = #{entityName,jdbcType=VARCHAR},
+      interface_url = #{interfaceUrl,jdbcType=VARCHAR},
+      deleted = #{deleted,jdbcType=INTEGER},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where interface_id = #{interfaceId,jdbcType=INTEGER}
+  </update>
+  
+<!-- 
+	List<Interface> selectInterFaceByImageId(Integer imageId);
+ -->
+<select id="selectInterFaceByImageId" resultMap="ResultMapWithBLOBs">
+	select * from t_interface where project_image_id=#{imageId} and deleted=1
+</select> 
+
+<!-- 
+	int deleteFaceByImageId(Integer imageId);
+ -->
+<delete id="deleteFaceByImageId">
+	delete from t_interface where project_image_id=#{imageId}
+</delete>
+
+</mapper>

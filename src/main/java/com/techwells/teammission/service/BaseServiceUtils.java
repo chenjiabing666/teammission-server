@@ -1,6 +1,10 @@
 package com.techwells.teammission.service;
 
+import java.util.List;
+
+import com.techwells.teammission.dao.ProjectDynamicMapper;
 import com.techwells.teammission.dao.UserMapper;
+import com.techwells.teammission.domain.ProjectDynamic;
 import com.techwells.teammission.domain.User;
 import com.techwells.teammission.util.RedisUtils;
 
@@ -35,4 +39,50 @@ public class BaseServiceUtils {
 		}
 		return user;   //直接返回即可，不用判断是否为null
 	}
+	
+	
+	/**
+	 * 添加动态
+	 * @param dynamicMapper  
+	 * @param redisUtils
+	 * @param domainKey
+	 * @param dynamic  动态
+	 * @return
+	 * @throws Exception
+	 */
+	public static void addDynamic(ProjectDynamicMapper dynamicMapper,RedisUtils redisUtils,String domainKey,ProjectDynamic dynamic,Long timeout) throws Exception{
+		//先添加到mysql中
+		int count=dynamicMapper.insertSelective(dynamic);
+		
+		//如果没有添加成功，直接抛出异常，回滚数据
+		if (count==0) {
+			throw new RuntimeException();
+		}
+		
+		//如果添加成功，添加到缓存中
+		try {
+			//从右边添加
+			redisUtils.addLeftListObject(domainKey+dynamic.getProjectId(), dynamic);
+		} catch (Exception e) {
+			throw new RuntimeException();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

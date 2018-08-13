@@ -169,6 +169,14 @@
       #{image.createdDate,jdbcType=TIMESTAMP})
       </foreach>
  </insert>
+ 
+ 
+<!-- 
+	 List<ProjectImage> selectImagesByProjectId(Integer projectId);
+ -->
+<select id="selectImagesByProjectId" resultMap="BaseResultMap">
+	select * from t_project_image where project_id=#{projectId}
+</select>
   
   
   

@@ -30,7 +30,7 @@
     ,
     <include refid="Blob_Column_List" />
     from t_project
-    where project_id = #{projectId,jdbcType=INTEGER}
+    where project_id = #{projectId,jdbcType=INTEGER} and deleted!=0
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from t_project
@@ -209,7 +209,7 @@ FROM
 	t_user_project up
 WHERE
 	u.user_id = up.user_id
-AND up.project_id = #{projectId}
+AND up.project_id = #{projectId} and deleted!=0
   </select>
    
   

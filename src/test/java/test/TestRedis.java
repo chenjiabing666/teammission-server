@@ -10,6 +10,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import sun.launcher.resources.launcher;
 
 import com.techwells.teammission.dao.UserMapper;
+import com.techwells.teammission.domain.Interface;
+import com.techwells.teammission.domain.ProjectImage;
 import com.techwells.teammission.domain.User;
 import com.techwells.teammission.service.UserService;
 import com.techwells.teammission.util.RedisUtils;
@@ -19,29 +21,10 @@ public class TestRedis {
 	@Test
 	public void test1() throws Exception{
 		ClassPathXmlApplicationContext context=new ClassPathXmlApplicationContext("spring-mybatis.xml");
-//		UserService userService=context.getBean("userServiceImpl",UserService.class);
-//		UserMapper userMapper=context.getBean("userMapper",UserMapper.class);
+		List<ProjectImage> projectImages=new ArrayList<ProjectImage>();
 		RedisUtils redisUtils=context.getBean("redisUtils",RedisUtils.class);
-		
-		User user=new User();
-		user.setUserId(1);
-		user.setUserName("陈加兵");
-		Person person=new Person();
-		person.setName("Jak");
-		person.setAge(22);
-		
-		User user2=new User();
-		user2.setUserId(1);
-		user2.setUserName("陈加兵");
-		
-		List<User> users=new ArrayList<User>();
-		users.add(user);
-		users.add(user2);
-		
-//		person.setUsers(users);
-		
-		redisUtils.addStringObject("u", users);
-		
+		List<Interface> faces=(List<Interface>) redisUtils.getHashObject("ImageInterFace", "1");
+		System.out.println(faces);
 	}
 	
 	@Test
@@ -51,10 +34,8 @@ public class TestRedis {
 //		UserMapper userMapper=context.getBean("userMapper",UserMapper.class);
 		RedisUtils redisUtils=context.getBean("redisUtils",RedisUtils.class);
 		
-		
 		try {
-			List<User> users=(List<User>) redisUtils.getStringObject("u");
-			System.out.println(users.size());
+			redisUtils.deleteKey("project");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

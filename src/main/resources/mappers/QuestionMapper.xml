@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.techwells.teammission.dao.QuestionMapper" >
+  <resultMap id="BaseResultMap" type="com.techwells.teammission.domain.Question" >
+    <id column="question_id" property="questionId" jdbcType="INTEGER" />
+    <result column="repy_time" property="repyTime" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    <result column="visibility" property="visibility" jdbcType="INTEGER" />
+    <result column="show_users_id" property="showUsersId" jdbcType="VARCHAR" />
+    <result column="reply_who" property="replyWho" jdbcType="INTEGER" />
+    <result column="reply_users_id" property="replyUsersId" jdbcType="VARCHAR" />
+    <result column="remind" property="remind" jdbcType="INTEGER" />
+    <result column="remind_time" property="remindTime" jdbcType="INTEGER" />
+    <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.techwells.teammission.domain.Question" extends="BaseResultMap" >
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    question_id, repy_time, title, deleted, visibility, show_users_id, reply_who, reply_users_id, 
+    remind, remind_time, created_date, update_date
+  </sql>
+  <sql id="Blob_Column_List" >
+    description
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_question
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_question
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.techwells.teammission.domain.Question" >
+    <selectKey resultType="java.lang.Integer" keyProperty="questionId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_question (repy_time, title, deleted, 
+      visibility, show_users_id, reply_who, 
+      reply_users_id, remind, remind_time, 
+      created_date, update_date, description
+      )
+    values (#{repyTime,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{deleted,jdbcType=INTEGER}, 
+      #{visibility,jdbcType=INTEGER}, #{showUsersId,jdbcType=VARCHAR}, #{replyWho,jdbcType=INTEGER}, 
+      #{replyUsersId,jdbcType=VARCHAR}, #{remind,jdbcType=INTEGER}, #{remindTime,jdbcType=INTEGER}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{description,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.techwells.teammission.domain.Question" >
+    <selectKey resultType="java.lang.Integer" keyProperty="questionId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_question
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="repyTime != null" >
+        repy_time,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+      <if test="visibility != null" >
+        visibility,
+      </if>
+      <if test="showUsersId != null" >
+        show_users_id,
+      </if>
+      <if test="replyWho != null" >
+        reply_who,
+      </if>
+      <if test="replyUsersId != null" >
+        reply_users_id,
+      </if>
+      <if test="remind != null" >
+        remind,
+      </if>
+      <if test="remindTime != null" >
+        remind_time,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="repyTime != null" >
+        #{repyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="visibility != null" >
+        #{visibility,jdbcType=INTEGER},
+      </if>
+      <if test="showUsersId != null" >
+        #{showUsersId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyWho != null" >
+        #{replyWho,jdbcType=INTEGER},
+      </if>
+      <if test="replyUsersId != null" >
+        #{replyUsersId,jdbcType=VARCHAR},
+      </if>
+      <if test="remind != null" >
+        #{remind,jdbcType=INTEGER},
+      </if>
+      <if test="remindTime != null" >
+        #{remindTime,jdbcType=INTEGER},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.techwells.teammission.domain.Question" >
+    update t_question
+    <set >
+      <if test="repyTime != null" >
+        repy_time = #{repyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null" >
+        deleted = #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="visibility != null" >
+        visibility = #{visibility,jdbcType=INTEGER},
+      </if>
+      <if test="showUsersId != null" >
+        show_users_id = #{showUsersId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyWho != null" >
+        reply_who = #{replyWho,jdbcType=INTEGER},
+      </if>
+      <if test="replyUsersId != null" >
+        reply_users_id = #{replyUsersId,jdbcType=VARCHAR},
+      </if>
+      <if test="remind != null" >
+        remind = #{remind,jdbcType=INTEGER},
+      </if>
+      <if test="remindTime != null" >
+        remind_time = #{remindTime,jdbcType=INTEGER},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.techwells.teammission.domain.Question" >
+    update t_question
+    set repy_time = #{repyTime,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      deleted = #{deleted,jdbcType=INTEGER},
+      visibility = #{visibility,jdbcType=INTEGER},
+      show_users_id = #{showUsersId,jdbcType=VARCHAR},
+      reply_who = #{replyWho,jdbcType=INTEGER},
+      reply_users_id = #{replyUsersId,jdbcType=VARCHAR},
+      remind = #{remind,jdbcType=INTEGER},
+      remind_time = #{remindTime,jdbcType=INTEGER},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=LONGVARCHAR}
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.techwells.teammission.domain.Question" >
+    update t_question
+    set repy_time = #{repyTime,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      deleted = #{deleted,jdbcType=INTEGER},
+      visibility = #{visibility,jdbcType=INTEGER},
+      show_users_id = #{showUsersId,jdbcType=VARCHAR},
+      reply_who = #{replyWho,jdbcType=INTEGER},
+      reply_users_id = #{replyUsersId,jdbcType=VARCHAR},
+      remind = #{remind,jdbcType=INTEGER},
+      remind_time = #{remindTime,jdbcType=INTEGER},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </update>
+</mapper>

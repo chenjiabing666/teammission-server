@@ -1,6 +1,8 @@
 package com.techwells.teammission.domain;
 
-public class UserProjectKey {
+import java.io.Serializable;
+
+public class UserProjectKey implements Serializable {
     private Integer userId;
 
     private Integer projectId;

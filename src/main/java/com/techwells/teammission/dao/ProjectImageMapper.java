@@ -26,6 +26,13 @@ public interface ProjectImageMapper {
      */
     int insertImageBatch(List<ProjectImage> list);
     
+    /**
+     * 根据项目id获取图片
+     * @param projectId  项目Id
+     * @return 
+     */
+    List<ProjectImage> selectImagesByProjectId(Integer projectId);
+    
     
     
 }
