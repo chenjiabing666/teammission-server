@@ -12,12 +12,14 @@ import org.apache.poi.hssf.record.UseSelFSRecord;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.sun.org.apache.bcel.internal.generic.LSTORE;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.sun.org.apache.regexp.internal.recompile;
 import com.techwells.teammission.dao.CommentMapper;
 import com.techwells.teammission.dao.UserMapper;
 import com.techwells.teammission.domain.Comment;
 import com.techwells.teammission.domain.User;
+import com.techwells.teammission.domain.rs.CommentUserVos;
 import com.techwells.teammission.service.UserService;
 import com.techwells.teammission.util.RedisUtils;
 import com.techwells.teammission.util.StringUtil;
@@ -27,27 +29,34 @@ public class CommentTest {
 	public void test1(){
 		ClassPathXmlApplicationContext context=new ClassPathXmlApplicationContext("spring-mybatis.xml");
 		CommentMapper commentMapper=context.getBean("commentMapper",CommentMapper.class);
-		
-		List<Comment> comments=new ArrayList<Comment>();
-		this.Tree(1, commentMapper, comments);
-		for (Comment comment : comments) {
-			System.out.println(comment);
-		}
-		
+//		CommentUserVos commentUserVos=commentMapper.selectCommentUserVosByUserIdAndParentId(3, 2, 3);
+//		System.out.println(commentUserVos);
+	Comment comment=null;
+	comment=commentMapper.selectByPrimaryKey(11);
+	System.out.println(comment);
+								
+
 		
 	}
 	
 	
-	public void Tree(Integer pid,CommentMapper commentMapper,List<Comment> comments){
-		List<Comment> comment=commentMapper.selectCommentByParentId(pid);
-		if (comment!=null) {
-			comments.addAll(comment);
-			//遍历
-			for (Comment comment2 : comment) {
-				Tree(comment2.getCommentId(), commentMapper, comments);
+	public void Tree(Integer userId,Integer toUserId,Integer commentId,CommentMapper commentMapper,List<CommentUserVos> comments){
+		CommentUserVos commentUserVos=commentMapper.selectCommentUserVosByUserIdAndParentId(userId, toUserId, commentId);
+		if (commentUserVos!=null) {
+			comments.add(commentUserVos);
+			Tree(commentUserVos.getToUserId(), commentUserVos.getUserId(),commentUserVos.getParentId(), commentMapper, comments);
+		}
+	}
+	
+	public void getComment(Integer parentId,Integer userId,Integer toUserId,List<Comment> comments,CommentMapper commentMapper){
+		List<Comment> cm=commentMapper.selectCommentByParentId(parentId,userId,toUserId);
+		if (cm!=null) {
+			comments.addAll(cm);  //添加到集合中
+			//遍历获取下面的所有子评论
+			for (Comment comment : cm) {
+				getComment(comment.getCommentId(), comment.getToUserId(), comment.getUserId(), comments, commentMapper);
 			}
 		}
-		
 	}
 	
 	

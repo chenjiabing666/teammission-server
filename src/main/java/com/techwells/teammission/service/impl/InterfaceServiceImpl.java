@@ -98,7 +98,7 @@ public class InterfaceServiceImpl implements InterfaceService {
 		faces=interfaceMapper.selectInterFaceByImageId(imageId);
 		
 		//没有接口信息，直接返回信息，不过不需要缓存了
-		if (faces==null) {
+		if (faces.size()==0) {
 			resultInfo.setResult(null);
 			resultInfo.setTotal(0);
 			resultInfo.setMessage("获取成功");

@@ -3,8 +3,8 @@ package com.techwells.teammission.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Comment implements Serializable {
-	private static final long serialVersionUID = -4747881837834161823L;
+public class Comment implements Serializable{
+	private static final long serialVersionUID = 6486955752354724558L;
 
 	private Integer commentId;
 
@@ -17,6 +17,10 @@ public class Comment implements Serializable {
     private Integer toUserId;
 
     private Integer weeklyId;
+
+    private Integer dislikeCount;
+
+    private Integer likeCount;
 
     private Date createdDate;
 
@@ -76,6 +80,22 @@ public class Comment implements Serializable {
         this.weeklyId = weeklyId;
     }
 
+    public Integer getDislikeCount() {
+        return dislikeCount;
+    }
+
+    public void setDislikeCount(Integer dislikeCount) {
+        this.dislikeCount = dislikeCount;
+    }
+
+    public Integer getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -115,16 +135,4 @@ public class Comment implements Serializable {
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
     }
-
-	@Override
-	public String toString() {
-		return "Comment [commentId=" + commentId + ", userId=" + userId
-				+ ", rowId=" + rowId + ", parentId=" + parentId + ", toUserId="
-				+ toUserId + ", weeklyId=" + weeklyId + ", createdDate="
-				+ createdDate + ", activated=" + activated + ", deleted="
-				+ deleted + ", updateDate=" + updateDate + ", content="
-				+ content + "]";
-	}
-    
-    
 }

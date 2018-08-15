@@ -157,7 +157,7 @@ public class ProjectImageServiceImpl implements ProjectImageService {
 		projectImages = projectImageMapper.selectImagesByProjectId(projectId);
 
 		// mysql中也没有获取到
-		if (projectImages == null) {
+		if (projectImages.size()==0) {
 			resultInfo.setResult(null);
 			resultInfo.setTotal(0);
 			resultInfo.setMessage("获取成功");

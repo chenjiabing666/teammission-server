@@ -202,17 +202,21 @@ public class ProjectServiceImpl implements ProjectService {
 		//缓存中没有获取到，那么从数据库中查找
 		users=projectMapper.selectUserByProjectId(projectId);  //从数据库中获取信息
 		
-		//添加到缓存中
-		try {
-			//将数据缓存在hash中
-			redisUtils.addHashObject(PROJECT_MEMBERS,projectId+"" , users,PROJECT_EXPIRE_TIME,TimeUnit.SECONDS);
-//			redisUtils.addStringObject(UESER_PROJECT+"_"+projectId, users, USER_PROJECT_EXPIRE_TIME, TimeUnit.SECONDS);
-		} catch (Exception e) {
-			throw new RuntimeException();
+		//如果查询到了数据，那么添加到缓存中
+		if (users.size()>0) {
+			//添加到缓存中
+			try {
+				//将数据缓存在hash中
+				redisUtils.addHashObject(PROJECT_MEMBERS,projectId+"" , users,PROJECT_EXPIRE_TIME,TimeUnit.SECONDS);
+//				redisUtils.addStringObject(UESER_PROJECT+"_"+projectId, users, USER_PROJECT_EXPIRE_TIME, TimeUnit.SECONDS);
+			} catch (Exception e) {
+				throw new RuntimeException();
+			}
 		}
 		
 		resultInfo.setMessage("获取成功");
 		resultInfo.setResult(users);
+		resultInfo.setTotal(users.size());
 		return resultInfo;
 		
 	}

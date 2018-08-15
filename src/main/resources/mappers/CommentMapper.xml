@@ -8,6 +8,8 @@
     <result column="parent_id" property="parentId" jdbcType="INTEGER" />
     <result column="to_user_id" property="toUserId" jdbcType="INTEGER" />
     <result column="weekly_id" property="weeklyId" jdbcType="INTEGER" />
+    <result column="dislike_count" property="dislikeCount" jdbcType="INTEGER" />
+    <result column="like_count" property="likeCount" jdbcType="INTEGER" />
     <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
     <result column="activated" property="activated" jdbcType="INTEGER" />
     <result column="deleted" property="deleted" jdbcType="INTEGER" />
@@ -17,8 +19,8 @@
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    comment_id, user_id, row_id, parent_id, to_user_id, weekly_id, created_date, activated, 
-    deleted, update_date
+    comment_id, user_id, row_id, parent_id, to_user_id, weekly_id, dislike_count, like_count, 
+    created_date, activated, deleted, update_date
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -40,13 +42,15 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_comment (user_id, row_id, parent_id, 
-      to_user_id, weekly_id, created_date, 
-      activated, deleted, update_date, 
-      content)
+      to_user_id, weekly_id, dislike_count, 
+      like_count, created_date, activated, 
+      deleted, update_date, content
+      )
     values (#{userId,jdbcType=INTEGER}, #{rowId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, 
-      #{toUserId,jdbcType=INTEGER}, #{weeklyId,jdbcType=INTEGER}, #{createdDate,jdbcType=TIMESTAMP}, 
-      #{activated,jdbcType=INTEGER}, #{deleted,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}, 
-      #{content,jdbcType=LONGVARCHAR})
+      #{toUserId,jdbcType=INTEGER}, #{weeklyId,jdbcType=INTEGER}, #{dislikeCount,jdbcType=INTEGER}, 
+      #{likeCount,jdbcType=INTEGER}, #{createdDate,jdbcType=TIMESTAMP}, #{activated,jdbcType=INTEGER}, 
+      #{deleted,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.techwells.teammission.domain.Comment" >
     <selectKey resultType="java.lang.Integer" keyProperty="commentId" order="AFTER" >
@@ -68,6 +72,12 @@
       </if>
       <if test="weeklyId != null" >
         weekly_id,
+      </if>
+      <if test="dislikeCount != null" >
+        dislike_count,
+      </if>
+      <if test="likeCount != null" >
+        like_count,
       </if>
       <if test="createdDate != null" >
         created_date,
@@ -100,6 +110,12 @@
       </if>
       <if test="weeklyId != null" >
         #{weeklyId,jdbcType=INTEGER},
+      </if>
+      <if test="dislikeCount != null" >
+        #{dislikeCount,jdbcType=INTEGER},
+      </if>
+      <if test="likeCount != null" >
+        #{likeCount,jdbcType=INTEGER},
       </if>
       <if test="createdDate != null" >
         #{createdDate,jdbcType=TIMESTAMP},
@@ -136,6 +152,12 @@
       <if test="weeklyId != null" >
         weekly_id = #{weeklyId,jdbcType=INTEGER},
       </if>
+      <if test="dislikeCount != null" >
+        dislike_count = #{dislikeCount,jdbcType=INTEGER},
+      </if>
+      <if test="likeCount != null" >
+        like_count = #{likeCount,jdbcType=INTEGER},
+      </if>
       <if test="createdDate != null" >
         created_date = #{createdDate,jdbcType=TIMESTAMP},
       </if>
@@ -161,6 +183,8 @@
       parent_id = #{parentId,jdbcType=INTEGER},
       to_user_id = #{toUserId,jdbcType=INTEGER},
       weekly_id = #{weeklyId,jdbcType=INTEGER},
+      dislike_count = #{dislikeCount,jdbcType=INTEGER},
+      like_count = #{likeCount,jdbcType=INTEGER},
       created_date = #{createdDate,jdbcType=TIMESTAMP},
       activated = #{activated,jdbcType=INTEGER},
       deleted = #{deleted,jdbcType=INTEGER},
@@ -175,6 +199,8 @@
       parent_id = #{parentId,jdbcType=INTEGER},
       to_user_id = #{toUserId,jdbcType=INTEGER},
       weekly_id = #{weeklyId,jdbcType=INTEGER},
+      dislike_count = #{dislikeCount,jdbcType=INTEGER},
+      like_count = #{likeCount,jdbcType=INTEGER},
       created_date = #{createdDate,jdbcType=TIMESTAMP},
       activated = #{activated,jdbcType=INTEGER},
       deleted = #{deleted,jdbcType=INTEGER},
@@ -182,11 +208,110 @@
     where comment_id = #{commentId,jdbcType=INTEGER}
   </update>
   
-  <!-- 
-  	 Comment selectCommentByParentId(Integer parentId);
-   -->
-  <select id="selectCommentByParentId" resultMap="ResultMapWithBLOBs">
-  		select * from t_comment where parent_id=#{parentId}
-  </select>
-  
+ <!-- 
+ 	List<CommentUserVos> selectComentByWeekId(Integer weekId);
+  -->
+<select id="selectComentByWeekId" resultType="com.techwells.teammission.domain.rs.CommentUserVos">
+	select new.*,t_user.real_name as toRealName from (select
+	c.comment_id as commentId,
+	c.parent_id as parentId,
+	c.user_id as userId,
+	u.user_icon as userIcon,
+	u.real_name as realName,
+	c.created_date as replayTime,
+	c.content as content,
+	c.to_user_id as toUserId,
+	c.like_count as likeCount,
+	c.dislike_count as disLikeCount
+FROM
+	t_comment c
+inner join t_user u on u.user_id = c.user_id
+WHERE
+	c.weekly_id = #{weekId} order by c.created_date) new left join t_user on new.toUserId=t_user.user_id 
+</select>
+
+
+<!-- 
+	List<CommentUserVos> selectCommentUserVosByUserIdAndParentId(@Param("userId")Integer userId,@Param("toUserId")Integer toUserId,@Param("commentId")Integer commentId);
+ -->
+<select id="selectCommentUserVosByUserIdAndParentId" resultType="com.techwells.teammission.domain.rs.CommentUserVos">
+	SELECT
+	new.*, t_user.real_name AS toRealName
+FROM
+	(
+		SELECT
+			c.comment_id AS commentId,
+			c.parent_id AS parentId,
+			c.user_id AS userId,
+			u.user_icon AS userIcon,
+			u.real_name AS realName,
+			c.created_date AS replayTime,
+			c.content AS content,
+			c.to_user_id AS toUserId,
+			c.like_count AS likeCount,
+			c.dislike_count AS disLikeCount
+		FROM
+			t_comment c
+		INNER JOIN t_user u ON u.user_id = c.user_id
+		<where>
+			<if test="userId!=null">
+				and c.user_id=#{userId}
+			</if>
+			
+			<if test="commentId!=null">
+				and comment_id=#{commentId}
+			</if>
+			
+			<if test="toUserId">
+				and c.to_user_id in (#{toUserId},0)
+			</if>
+		</where>
+			  
+	) new
+LEFT JOIN t_user ON new.toUserId = t_user.user_id
+</select>
+
+
+<!-- 
+	    List<Comment> selectCommentByParentId(@Param("parentId")Integer parentId,@Param("userId")Integer userId,@Param("toUserId")Integer toUserId);
+ -->
+<select id="selectCommentByParentId" resultMap="ResultMapWithBLOBs">
+	select comment_id,user_id,to_user_id from t_comment
+		<where>
+			<if test="userId!=null">
+				and user_id=#{userId}
+			</if>
+			
+			<if test="toUserId!=null">
+				and to_user_id=#{toUserId} 
+			</if>
+			and parent_id=#{parentId}
+		</where>
+</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </mapper>

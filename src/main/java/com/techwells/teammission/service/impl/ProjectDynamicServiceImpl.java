@@ -55,7 +55,7 @@ public class ProjectDynamicServiceImpl implements ProjectDynamicService {
 		
 		
 		//如果查到数据了，那么添加缓存中
-		if(projectDynamics!=null){
+		if(projectDynamics.size()>0){
 			try {
 				//添加到缓存中
 				redisUtils.addRigthListObjectBatch(PROJECT_DYNAMIC+projectId, redisUtils.convertToCollection(projectDynamics), null, null);
